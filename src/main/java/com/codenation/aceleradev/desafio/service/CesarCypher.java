@@ -3,7 +3,7 @@ package com.codenation.aceleradev.desafio.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CesarTransform {
+public class CesarCypher {
 
 	public String encrypt(int shift, String text) {
 		StringBuffer result = new StringBuffer();

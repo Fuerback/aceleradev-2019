@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.codenation.aceleradev.desafio.service.ChallengeData;
+import com.codenation.aceleradev.desafio.service.CodeNation;
 
 @RestController
 @RequestMapping(value = "codenation", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CodeNationController {
 
 	@Autowired
-	private ChallengeData challengeData;
+	private CodeNation codeNation;
 
-	@RequestMapping(value = "/data", method = RequestMethod.GET)
+	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	public String getChallengeData(@RequestParam String token) throws IOException {
-		return challengeData.request( token );
+		return codeNation.request( token );
 	}
 
-	@RequestMapping(value = "/data", method = RequestMethod.POST, produces = MediaType.MULTIPART_FORM_DATA_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@RequestMapping(value = "/submit", method = RequestMethod.POST, produces = MediaType.MULTIPART_FORM_DATA_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String submitAnswer(@RequestParam String token, @RequestParam("answer") MultipartFile answer)
 			throws IOException {
-		return challengeData.submit( token, answer );
+		return codeNation.submit( token, answer );
 	}
 }

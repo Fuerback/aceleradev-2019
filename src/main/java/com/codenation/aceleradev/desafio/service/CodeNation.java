@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codenation.aceleradev.desafio.client.CodeNationClient;
 
 @Service
-public class ChallengeData {
+public class CodeNation {
 
 	public static final String TEMP_PATH = "/home/felipe/Code/desafio/src/main/java/com/codenation/aceleradev/desafio/files/";
 	public static final String ANSWER_PATH = TEMP_PATH + "answer/";
