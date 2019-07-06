@@ -14,9 +14,8 @@ import com.codenation.aceleradev.desafio.client.CodeNationClient;
 @Service
 public class CodeNation {
 
-	public static final String TEMP_PATH = "/home/felipe/Code/desafio/src/main/java/com/codenation/aceleradev/desafio/files/";
-	public static final String ANSWER_PATH = TEMP_PATH + "answer/";
-	public static final String NAME_FILE = "answer.json";
+	private static final String REQUEST_FILE_PATH = "./src/main/java/com/codenation/aceleradev/desafio/files/request/answer.json";
+	private static final String ANSWER_FILE_PATH = "./src/main/java/com/codenation/aceleradev/desafio/files/answer/answer.json";
 
 	public String submit(String token, MultipartFile answer) throws IOException {
 		CodeNationClient client = new CodeNationClient( token );
@@ -24,12 +23,12 @@ public class CodeNation {
 		createNewFile( answer );
 
 		return client.submitAnswer(
-				ANSWER_PATH + answer.getOriginalFilename() );
+				ANSWER_FILE_PATH );
 	}
 
 	private void createNewFile(MultipartFile answer) throws IOException {
 		File newFile = new File(
-				ANSWER_PATH + answer.getOriginalFilename() );
+				ANSWER_FILE_PATH );
 		newFile.createNewFile();
 		FileOutputStream fos = new FileOutputStream( newFile );
 		fos.write( answer.getBytes() );
@@ -42,7 +41,7 @@ public class CodeNation {
 		String response;
 
 		File fout = new File(
-				TEMP_PATH + NAME_FILE );
+				REQUEST_FILE_PATH );
 
 		response = client.requestData();
 

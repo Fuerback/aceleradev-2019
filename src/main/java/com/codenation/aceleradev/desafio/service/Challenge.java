@@ -13,7 +13,7 @@ import com.codenation.aceleradev.desafio.client.CodeNationClient;
 @Service
 public class Challenge {
 
-	public static final String ANSWER_FILE_PATH = "/home/felipe/Code/desafio/src/main/java/com/codenation/aceleradev/desafio/files/answer/answer.json";
+	public static final String ANSWER_FILE_PATH = "./src/main/java/com/codenation/aceleradev/desafio/files/answer/answer.json";
 	@Autowired
 	private CodeNation codeNation;
 
@@ -24,25 +24,40 @@ public class Challenge {
 	private Sha1 sha1;
 
 	public String execute(String token) throws IOException {
-		String requestText = codeNation.request( token );
+		String requestText = requestFile( token );
 
-		JSONObject jsonObject = new JSONObject( requestText );
+		JSONObject jsonObject = editJsonFile( requestText );
 
-		String decryptText = cesarCypher
-				.decrypt( jsonObject.getInt( "numero_casas" ), jsonObject.getString( "cifrado" ) );
-		String sha1Code = sha1.transform( decryptText );
+		createAnswerFile( jsonObject );
 
-		jsonObject.put( "decifrado", decryptText );
-		jsonObject.put( "resumo_criptografico", sha1Code );
+		return submitAnswer( token );
+	}
 
+	private String submitAnswer(String token) {
+		CodeNationClient client = new CodeNationClient( token );
+		return client.submitAnswer( ANSWER_FILE_PATH );
+	}
+
+	private void createAnswerFile(JSONObject jsonObject) throws IOException {
 		File newFile = new File(
 				ANSWER_FILE_PATH );
 		newFile.createNewFile();
 		FileOutputStream fos = new FileOutputStream( newFile );
 		fos.write( jsonObject.toString().getBytes() );
 		fos.close();
+	}
 
-		CodeNationClient client = new CodeNationClient( token );
-		return client.submitAnswer( ANSWER_FILE_PATH );
+	private JSONObject editJsonFile(String requestText) {
+		JSONObject jsonObject = new JSONObject( requestText );
+		String decryptText = cesarCypher
+				.decrypt( jsonObject.getInt( "numero_casas" ), jsonObject.getString( "cifrado" ) );
+		String sha1Code = sha1.transform( decryptText );
+		jsonObject.put( "decifrado", decryptText );
+		jsonObject.put( "resumo_criptografico", sha1Code );
+		return jsonObject;
+	}
+
+	private String requestFile(String token) throws IOException {
+		return codeNation.request( token );
 	}
 }
